@@ -17,6 +17,7 @@ To avoid putting api key secrets in plaintext within Cloudwatch Rules, the lambd
         "Authorization": ""
     }
   },
+  "HTTP_VERB": "DELETE",
   "ENDPOINT": "/some/resource",
   "REGION": "region of param store value"
 }
@@ -24,5 +25,12 @@ To avoid putting api key secrets in plaintext within Cloudwatch Rules, the lambd
 
 ##### Default values:
 
-REGION: "eu-west-2"\
 API_HOST: "localhost"
+HTTP_VERB: "GET"
+REGION: "eu-west-2"
+
+##### Supported values:
+
+HTTP_VERB: DELETE/GET
+
+Note: zip shouldn't include Terraform scripts - zip -rq api-caller ./* -x '*terraform*'

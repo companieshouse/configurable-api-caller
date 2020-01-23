@@ -1,0 +1,238 @@
+#!/bin/bash
+
+BOLD='\033[1m'
+NORMAL='\033[0m'
+
+BLUE='\033[1;34m'
+NO_COLOUR='\033[0m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+
+banner () {
+    eval $(echo printf -- '"$1%0.s"' {1..$(tput cols)})
+    printf "\n"
+}
+
+check_proceed () {
+    banner "-"
+    print_info "AWS Profile: ${BOLD}${AWS_PROFILE}${NORMAL}"
+    print_info "Region: ${BOLD}${region}${NORMAL}"
+    print_info "State bucket: ${BOLD}${state_bucket}${NORMAL}"
+    print_info "Workspace prefix: ${BOLD}${workspace_key_prefix}${NORMAL}"
+    print_info "State file: ${BOLD}${statefile_name}${NORMAL}"
+    print_info "State file path: ${BOLD}${state_bucket}/${workspace_key_prefix}/${workspace}/${statefile_name}${NORMAL}"
+    banner "-"
+
+    read -p "Do you wish to proceed? (yes/no) " answer
+    printf "\n"
+    if [[ "${answer}" != "yes" ]]; then
+        echo "User elected not to proceed"
+        exit 0
+    fi
+}
+
+check_return () {
+    local error_message=${1}
+
+    if [[ ${?} -ne 0 ]]; then
+        print_error "${error_message}"
+        exit ${?}
+    fi
+}
+
+check_terraform () {
+    which -s terraform
+    check_return "terraform not found in path"
+}
+
+check_version () {
+    local required_version="v0.12.9"
+    local version=$(terraform --version | head -n 1 | cut -d ' ' -f2 )
+    if [[ "${version}" != "${required_version}" ]]; then
+        print_error "Incorrect version of Terraform: ${version} (${required_version} required)"
+        exit 1
+    fi
+}
+
+configure_terraform () {
+    region="$(aws configure get region)"
+    statefile_name="${group}.tfstate"
+    state_bucket="${AWS_PROFILE}.terraform-state.ch.gov.uk"
+    workspace=common
+    workspace_key_prefix=configurable-api-caller
+
+    export_terraform_variable "region" "${region}"
+    export_terraform_variable "state_bucket" "${state_bucket}"
+}
+
+contains_element () {
+    local element="${1}"
+    local array=("${@:2}")
+
+    for i in "${array[@]}"; do
+        [[ "${i}" == "${element}" ]] && return 0
+    done
+    return 1
+}
+
+initialise_terraform () {
+    local current_workspace
+
+    current_workspace=$(terraform workspace show)
+
+    # Check if the correct workspace is already selected
+    if [[ -d ./.terraform ]]; then
+        print_info "Workspace: [${BOLD}${current_workspace}${NORMAL}]"
+        return 0
+    fi
+
+    # If an Incorrect workspace is selected we need to re-initialise
+    print_info "Incorrect workspace selected [${BOLD}${current_workspace}${NORMAL}], clearing state..."
+    rm -rf
+
+    print_info "Loading modules..."
+    terraform get
+
+    terraform init \
+        -backend-config="bucket=${state_bucket}" \
+        -backend-config="key=${statefile_name}" \
+        -backend-config="region=${region}" \
+        -backend-config="workspace_key_prefix=${workspace_key_prefix}"
+
+    # We may have pulled in a workspace after initialisation. Try selecting it...
+    if terraform workspace select ${workspace} > /dev/null 2>&1; then
+        print_info "Selected workspace [${BOLD}${workspace}${NORMAL}]"
+        return 0
+    fi
+
+    # The workspace doesn't exist, try creating it...
+    if terraform workspace new ${workspace}; then
+        print_info "Created workspace [${BOLD}${workspace}${NORMAL}]"
+        return 0
+    else
+        print_error "An error occurred while creating workspace [${workspace}]"
+        return 1
+    fi
+}
+
+pushd () {
+    printf "${YELLOW}Moving to directory [${1}]${NO_COLOUR}\n"
+    command pushd "${1}" > /dev/null
+}
+
+popd () {
+    printf "${YELLOW}Exiting directory [$(pwd)]${NO_COLOUR}\n"
+    command popd > /dev/null
+}
+
+print_debug () {
+    if [[ -n "${DEBUG}" ]] && [[ "$(echo ${DEBUG} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
+        printf "${YELLOW}Debug: ${NO_COLOUR}${1}\n"
+    fi
+}
+
+print_error () {
+    printf "${RED}Error: ${NO_COLOUR}$1\n"
+}
+
+print_info () {
+    printf "${BLUE}Info: ${NO_COLOUR}${1}\n"
+}
+
+print_warning () {
+    printf "${YELLOW}Warning: ${NO_COLOUR}${1}\n"
+}
+
+validate_action () {
+    local action="${1}"
+    local actions=(apply destroy plan refresh state)
+    for i in "${actions[@]}"; do
+        if [[ ${i} = "${action}" ]]; then
+            return 0
+        fi
+    done
+    print_error "Invalid action: [${BOLD}${action}${NORMAL}]"
+    exit 1
+}
+
+export_terraform_variable () {
+    local key="${1}"
+    local value="${2}"
+    local export_key="TF_VAR_${key}"
+
+    export ${export_key}="${value}"
+    print_debug "exporting variable: [${BOLD}${export_key}${NORMAL}]"
+}
+
+validate_group () {
+    local group_name="${1}"
+    if [[ ! -d "${script_directory}/groups/${group_name}" ]]; then
+        print_error "Group folder not found: [${BOLD}groups/${group_name}${NORMAL}]"
+        exit 1
+    fi
+}
+
+validate_profile () {
+    local profiles_directory="${script_directory}/groups/${group}/profiles"
+    local required_credentials=(
+        region
+        aws_access_key_id
+        aws_secret_access_key
+    )
+    local missing_credentials=false
+
+    for env_var in "${required_credentials[@]}"; do
+        value=$(aws configure get ${env_var})
+        if [[ -z ${value} ]]; then
+            print_error "${env_var} credential missing from your AWS_PROFILE. You must re-configure your AWS_profile to proceed"
+            missing_credentials=true
+        fi
+    done
+
+    if [[ ${missing_credentials} == true ]]; then
+        exit 1
+    fi
+
+    if [[ ! -d "${profiles_directory}/${AWS_PROFILE}" ]]; then
+        print_error "No configuration found for AWS profile: [${BOLD}${AWS_PROFILE}${NORMAL}]"
+        print_error "Are you sure this group is applicable to [${BOLD}${AWS_PROFILE}${NORMAL}]"
+        exit 1
+    fi
+}
+
+var_file_action () {
+    local action="${1}"
+    local allows_varfile=(apply plan push refresh destroy)
+    contains_element "${action}" "${allows_varfile[@]}"
+    return ${?}
+}
+
+verify_no_credentials_set () {
+    local unwanted_vars=(
+        AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY
+        AWS_DEFAULT_REGION
+    )
+    local variable_set=false
+
+    for env_var in "${unwanted_vars[@]}"; do
+       if [[ -n $(printenv ${env_var}) ]]; then
+           print_error "${env_var} detected, these should be defined via your profile. Please remove using (${BOLD}unset ${env_var} ${NORMAL})"
+           variable_set=true
+       fi
+    done
+
+    if [[ ${variable_set} == true ]]; then
+       exit 1
+    fi
+}
+
+warn_proxy () {
+    if [[ -n "${HTTP_PROXY:-}" ]] ||
+       [[ -n "${HTTPS_PROXY:-}" ]] ||
+       [[ -n "${http_proxy:-}" ]] ||
+       [[ -n "${https_proxy:-}" ]]; then
+       printf "\n"
+       print_warning "Proxy settings detected. This may affect connectivity${NO_COLOUR}\n"
+   fi
+}

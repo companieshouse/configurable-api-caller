@@ -1,0 +1,89 @@
+#!/bin/bash
+
+script_directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+source "${script_directory}/common"
+
+set -e
+set -o pipefail
+
+usage () {
+    print_info "usage: ${0} -g <group> -a <action> [<args>]"
+}
+
+validate_arguments () {
+    verify_argument_set "${group}" "Group has not been set"
+    verify_argument_set "${action}" "Action has not been set"
+
+    validate_group "${group}"
+    validate_action "${action}"
+}
+
+verify_argument_set () {
+    local name="${1}"
+    local message="${2}"
+    if [[ -z "${name}" ]]; then
+        print_error "${message}"
+        usage
+        exit 1
+    fi
+}
+
+verify_no_credentials_set
+
+check_terraform
+check_version
+
+regex="^-g[[:space:]]+([-a-zA-Z0-9]*)[[:space:]]+-a[[:space:]]+([a-zA-Z] *)([a-zA-Z]*)?\$"
+if [[ ! $* =~ ${regex} ]]; then
+    usage
+    exit 1
+fi
+
+while [[ $# -gt 0 ]]; do
+    key="${1}"
+    case ${key} in
+        -g|--group)
+            group="${2}"
+            shift
+            ;;
+        -a|--action)
+            action="${2}"
+            action_args="${@:3}"
+            break
+            ;;
+        *)
+            print_error "Set failed: unknown option ${1}"
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+validate_arguments
+validate_profile
+
+warn_proxy
+
+configure_terraform
+
+check_proceed
+
+banner "-"
+pushd "${script_directory}/groups/${group}"
+
+initialise_terraform
+
+if var_file_action ${action}; then
+    vars_file_flag="-var-file=${script_directory}/groups/${group}/profiles/${AWS_PROFILE}/vars"
+else
+    vars_file_flag=
+fi
+
+command="terraform ${action} ${action_args} ${vars_file_flag}"
+print_info "Executing command: [${BOLD}${command}${NORMAL}"]
+eval ${command}
+
+popd
+banner "-"
