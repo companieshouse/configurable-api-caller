@@ -2,6 +2,10 @@ provider "aws" {
   region = var.aws_region
 }
 
+terraform {
+  backend "s3" {}
+}
+
 // Lambda
 resource "aws_lambda_function" "configurable_api_lambda" {
   function_name = "configurable-api-caller"
@@ -13,7 +17,11 @@ resource "aws_lambda_function" "configurable_api_lambda" {
   timeout       = 15
   vpc_config {
     security_group_ids = [aws_security_group.allow_calls_to_api_caller.id]
-    subnet_ids = [data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2a]
+    subnet_ids = [
+      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2a,
+      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2b,
+      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2c,
+    ]
   }
 }
 
@@ -30,20 +38,20 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 resource "aws_iam_role" "lambda_role" {
   name = "allow-lambda-role"
   assume_role_policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-          "Service": "lambda.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-      }
-    ]
-  }
-  EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }
 
 // Policies
@@ -51,19 +59,7 @@ resource "aws_iam_role" "lambda_role" {
 resource "aws_iam_policy" "get_param_policy" {
   name        = "get_param_read"
   description = "Definition for Get Param Store, Systems Manager policy"
-  policy      = <<POLICY
-{
-  "Sid": "",
-  "Effect": "Allow",
-  "Action": [
-    "ssm:GetParameterHistory",
-    "ssm:GetParametersByPath",
-    "ssm:GetParameters",
-    "ssm:GetParameter"
-  ],
-  "Resource": "*"
-}
-POLICY
+  policy      = file("profiles/${var.aws_profile}/param_policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
@@ -82,19 +78,18 @@ resource "aws_iam_role_policy_attachment" "param_read" {
 }
 
 // Cloudwatch rule event
+// Add further resources here to add new service calls
 
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda" {
-  name                = "create-cloudwatch-event"
-  description         = "Cloudwatch event to call configurable-api-caller lambda every hour"
-  schedule_expression = "cron(0 0 * ? * * *)"
-// TODO - Will take this out when terraform script is working properly rather than potentially calling the lambda every hour.
-  is_enabled = false
+  name                = "call_api_caller_lambda"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  schedule_expression = "rate(1 hour)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller" {
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda.id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda.name
-  arn       = aws_cloudwatch_event_rule.call_api_caller_lambda.arn
+  arn       = aws_lambda_function.configurable_api_lambda.arn
   input     = file("profiles/${var.aws_profile}/input.json")
 }
 
@@ -109,8 +104,7 @@ data "terraform_remote_state" "management_vpc" {
   }
 }
 
-// Security groups inside concourse terraform module-webhook-trigger
-// Provision my own for this lambda.
+// Security group
 
 resource "aws_security_group" "allow_calls_to_api_caller" {
   name        = "allow_calls_to_api_caller"

@@ -7,7 +7,7 @@
       "Authorization": ""
     }
   },
-  "ENDPOINT": "/protect-your-details-api/app/clean-up",
+  "ENDPOINT": "/protect-your-details-api/clean-up",
   "REGION": "eu-west-2",
-  "HTTP_VERB": "DELETE"
+  "HTTP_VERB": "POST"
 }
