@@ -1,0 +1,4 @@
+aws_profile  = "staging"
+aws_region   = "eu-west-2"
+s3_bucket    = "ch-service-staging-release.ch.gov.uk"
+s3_key       = "configurable-api-caller/configurable-api-caller.zip"

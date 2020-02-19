@@ -26,9 +26,9 @@ To avoid putting api key secrets in plaintext within Cloudwatch Rules, the lambd
 
 ##### Default values:
 
-API_HOST: "localhost"
-HTTP_VERB: "GET"
-REGION: "eu-west-2"
+API_HOST: "localhost"<br>
+HTTP_VERB: "GET"<br>
+REGION: "eu-west-2"<br>
 DATA: {}
 
 ##### Supported values:
@@ -38,4 +38,4 @@ HTTP_VERB: GET/POST/DELETE
 Note: <br>Pipeline still in progress. Project is packaged from root folder.<br>
 rm configurable-api-caller.zip (Get rid of any existing artifacts)<br>
 tsc (compile typescript)<br>
-zip -rq configurable-api-caller ./* -x '*terraform*' (zip up, excluding terraform scripts)
+zip -rq configurable-api-caller ./* -x '\*terraform\*' (zip up, excluding terraform scripts)

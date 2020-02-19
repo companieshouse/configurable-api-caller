@@ -4,10 +4,9 @@
   "description": "Standalone API requests with configurable options for resource and authorisation, designed to be deployed to lambda for schedulable events",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development ts-node src/index.ts",
     "start:watch": "NODE_ENV=development nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production tsc",
+    "build": "tsc",
     "lint": "tslint -p ."
   },
   "repository": {
@@ -20,29 +19,12 @@
     "aws-sdk": "^2.591.0",
     "axios": "^0.19.0"
   },
-  "nodemonConfig": {
-    "watch": [
-      "./src"
-    ],
-    "ext": "ts",
-    "legacyWatch": true,
-    "ignore": [
-      "**/*.spec.ts"
-    ],
-    "exec": "ts-node ./src/index.ts"
-  },
   "bugs": {
     "url": "https://github.com/companieshouse/configurable-api-caller/issues"
   },
   "homepage": "https://github.com/companieshouse/configurable-api-caller#readme",
   "devDependencies": {
     "@types/node": "^12.12.18",
-    "@types/jest": "^24.0.21",
-    "@types/supertest": "^2.0.8",
-    "jest": "^24.9.0",
-    "nodemon": "^1.19.4",
-    "supertest": "^4.0.2",
-    "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.4"
