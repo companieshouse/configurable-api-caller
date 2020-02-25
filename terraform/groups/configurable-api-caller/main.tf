@@ -17,11 +17,7 @@ resource "aws_lambda_function" "configurable_api_lambda" {
   timeout       = 15
   vpc_config {
     security_group_ids = [aws_security_group.allow_calls_to_api_caller.id]
-    subnet_ids = [
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2a,
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2b,
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_ids.eu-west-2c,
-    ]
+    subnet_ids = split(",", data.terraform_remote_state.applications_vpc.outputs.application_ids)
   }
 }
 
@@ -95,12 +91,12 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller" {
 
 // VPC
 
-data "terraform_remote_state" "management_vpc" {
+data "terraform_remote_state" "applications_vpc" {
   backend = "s3"
   config = {
-    bucket = "development-${var.aws_region}.terraform-state.ch.gov.uk"
-    key    = "aws-common-infrastructure-terraform/common/networking.tfstate"
-    region = var.aws_region
+    bucket = "${var.remote_state_bucket}"
+    key    = "${var.state_prefix}/${var.deploy_to}/${var.deploy_to}.tfstate"
+    region = "${var.aws_region}"
   }
 }
 
@@ -109,18 +105,14 @@ data "terraform_remote_state" "management_vpc" {
 resource "aws_security_group" "allow_calls_to_api_caller" {
   name        = "allow_calls_to_api_caller"
   description = "Allow TLS calls to and from the configurable-api-caller"
-  vpc_id      = data.terraform_remote_state.management_vpc.outputs.management_vpc_id
+  vpc_id      = data.terraform_remote_state.applications_vpc.outputs.vpc_id
 
   ingress {
     # TLS (change to whatever ports you need)
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_cidrs.eu-west-2a,
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_cidrs.eu-west-2b,
-      data.terraform_remote_state.management_vpc.outputs.management_private_subnet_cidrs.eu-west-2c
-    ]
+    cidr_blocks = split(",", data.terraform_remote_state.applications_vpc.outputs.application_cidrs)
   }
 
   egress {
