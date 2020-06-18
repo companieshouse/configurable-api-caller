@@ -21,14 +21,6 @@ resource "aws_lambda_function" "configurable_api_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch" {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.configurable_api_lambda.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda.arn
-}
-
 // Role
 
 resource "aws_iam_role" "lambda_role" {
@@ -76,17 +68,70 @@ resource "aws_iam_role_policy_attachment" "param_read" {
 // Cloudwatch rule event
 // Add further resources here to add new service calls
 
-resource "aws_cloudwatch_event_rule" "call_api_caller_lambda" {
-  name                = "call_api_caller_lambda"
-  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
-  schedule_expression = "rate(1 hour)"
+// Protect your details
+resource "aws_cloudwatch_event_rule" "protect_your_details_call_api_caller" {
+  name                = "protect_your_details_call_api_caller"
+  description         = "Call ${aws_lambda_function.configurable_api_lambda.function_name} lambda to call routine protect your details job"
+  schedule_expression = "rate(10 minutes)"
 }
 
-resource "aws_cloudwatch_event_target" "event_target_api_caller" {
-  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda.id
-  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda.name
+resource "aws_cloudwatch_event_target" "protect_your_details_event_target" {
+  target_id = aws_cloudwatch_event_rule.protect_your_details_call_api_caller.id
+  rule      = aws_cloudwatch_event_rule.protect_your_details_call_api_caller.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/input.json")
+  input     = file("profiles/${var.aws_profile}/protect-your-details.json")
+}
+
+resource "aws_lambda_permission" "protect_your_details_allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.protect_your_details_call_api_caller.arn
+}
+
+// EFS queue filings
+resource "aws_cloudwatch_event_rule" "efs_queue_filings_call_api_caller" {
+  name                = "efs_queue_filings_call_api_caller"
+  description         = "Call ${aws_lambda_function.configurable_api_lambda.function_name} lambda to process filings on EFS"
+  schedule_expression = "rate(10 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "efs_queue_filings_event_target" {
+  target_id = aws_cloudwatch_event_rule.efs_queue_filings_call_api_caller.id
+  rule      = aws_cloudwatch_event_rule.efs_queue_filings_call_api_caller.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/efs-queue-filings.json")
+}
+
+resource "aws_lambda_permission" "efs_queue_filings_allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_queue_filings_call_api_caller.arn
+}
+
+// EFS submit to fes
+resource "aws_cloudwatch_event_rule" "efs_submit_fes_call_api_caller" {
+  name                = "efs_submit_fes_call_api_caller"
+  description         = "Call ${aws_lambda_function.configurable_api_lambda.function_name} lambda to submit EFS filings to FES"
+  schedule_expression = "rate(10 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "efs_submit_fes_event_target" {
+  target_id = aws_cloudwatch_event_rule.efs_submit_fes_call_api_caller.id
+  rule      = aws_cloudwatch_event_rule.efs_submit_fes_call_api_caller.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/efs-submit-fes.json")
+}
+
+resource "aws_lambda_permission" "efs_queue_filings_allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_submit_fes_call_api_caller.arn
 }
 
 // VPC
