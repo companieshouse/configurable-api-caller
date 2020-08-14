@@ -1,0 +1,13 @@
+{
+    "API_HOST": "api.cidev.aws.chdev.org",
+    "API_KEY_REF": "/api-caller/secure-key-test",
+    "IS_SSL": false,
+    "HEADERS": {
+      "headers": {
+        "Authorization": ""
+      }
+    },
+    "ENDPOINT": "/dissolutions-request/submit",
+    "REGION": "eu-west-2",
+    "HTTP_VERB": "POST"
+}
