@@ -102,6 +102,14 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions" {
   input     = file("profiles/${var.aws_profile}/dissolutions_submit.json")
 }
 
+resource "aws_lambda_permission" "allow_cloudwatch_dissolutions" {
+  statement_id  = "AllowExecutionFromCloudWatchDissolutions"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.arn
+}
+
 //
 // Workaround code to get multiple environments supported in development account. 
 // Ideally we would loop over a data structure providing vars for terraform resorces and template the json file, 
@@ -121,6 +129,15 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions_reb
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
   input     = file("profiles/${var.aws_profile}/dissolutions_submit_rebel1.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_rebel1" {
+  count         = var.deploy_to == "development" ? 1 : 0
+  statement_id  = "AllowExecutionFromCloudWatchDissolutionsRebel1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].arn
 }
 
 // VPC
