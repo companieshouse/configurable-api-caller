@@ -7,7 +7,7 @@
         "Authorization": ""
       }
     },
-    "ENDPOINT": "/dissolutions-request/submit",
+    "ENDPOINT": "/dissolution-request/submit",
     "REGION": "eu-west-2",
     "HTTP_VERB": "POST"
 }
