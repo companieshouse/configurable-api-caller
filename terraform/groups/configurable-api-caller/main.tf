@@ -89,6 +89,57 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller" {
   input     = file("profiles/${var.aws_profile}/input.json")
 }
 
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_dissolutions" {
+  name                = "call_api_caller_lambda_dissolutions"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions" {
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/dissolutions_submit.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_dissolutions" {
+  statement_id  = "AllowExecutionFromCloudWatchDissolutions"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.arn
+}
+
+//
+// Workaround code to get multiple environments supported in development account. 
+// Ideally we would loop over a data structure providing vars for terraform resorces and template the json file, 
+// but this would require migrations of terraform state in staging and live. If this needs to be extended further
+// migrating to a more extensible pattern should be considered.
+//
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_dissolutions_rebel1" {
+  count               = var.deploy_to == "development" ? 1 : 0
+  name                = "call_api_caller_lambda_dissolutions_rebel1"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions_rebel1" {
+  count     = var.deploy_to == "development" ? 1 : 0
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/dissolutions_submit_rebel1.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_rebel1" {
+  count         = var.deploy_to == "development" ? 1 : 0
+  statement_id  = "AllowExecutionFromCloudWatchDissolutionsRebel1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].arn
+}
+
 // VPC
 
 data "terraform_remote_state" "applications_vpc" {
