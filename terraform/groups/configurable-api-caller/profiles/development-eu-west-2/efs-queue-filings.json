@@ -1,0 +1,14 @@
+{
+  "API_HOST": "api.tcats1.aws.chdev.org",
+  "API_KEY_REF": "/api-caller/secure-application-key",
+  "IS_SSL": true,
+  "HEADERS": {
+    "headers": {
+      "Authorization": "",
+      "Content-Type": "application/json"
+    }
+  },
+  "ENDPOINT": "/efs-submission-api/events/queue-files",
+  "REGION": "eu-west-2",
+  "HTTP_VERB": "POST"
+}

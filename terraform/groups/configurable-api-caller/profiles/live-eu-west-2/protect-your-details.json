@@ -1,0 +1,13 @@
+{
+  "API_HOST": "api.companieshouse.gov.uk",
+  "API_KEY_REF": "/api-caller/secure-application-key",
+  "IS_SSL": true,
+  "HEADERS": {
+    "headers": {
+      "Authorization": ""
+    }
+  },
+  "ENDPOINT": "/protect-your-details-api/clean-up",
+  "REGION": "eu-west-2",
+  "HTTP_VERB": "POST"
+}
