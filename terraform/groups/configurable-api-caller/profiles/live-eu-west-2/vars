@@ -1,8 +1,8 @@
 aws_profile  = "live-eu-west-2"
 aws_region   = "eu-west-2"
-s3_bucket    = "ch-service-prod-release.ch.gov.uk"
+s3_bucket    = "ch-service-live-release.ch.gov.uk"
 s3_key       = "configurable-api-caller/configurable-api-caller.zip"
 
-remote_state_bucket = "ch-service-prod-terraform-state"
-state_prefix = "env:/prod"
-deploy_to    = "prod"
+remote_state_bucket = "ch-service-live-terraform-state"
+state_prefix = "env:/live"
+deploy_to    = "live"
