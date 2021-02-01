@@ -1,15 +1,15 @@
 {
-		"type": "Lambda",
-		"name": "configurable-api-caller",
-		"description": "Lambda that can be configured to regularly call a CH service through cloudwatch rules",
-		"owned_by": "Mike Moore",
-		"calls_via": "Cloudwatch rule",
-		"git_repo": "https://github.com/companieshouse/configurable-api-caller",
-		"specification": "https://github.com/companieshouse/configurable-api-caller/README.md",
-		"public": "false",
-		"users": "public/internal - API/Web",
-		"language": "NodeJS",
-		"integration_outgoing": [
-			"efs-submission-api,CALLS_API"
-		]
+	"type": "Lambda",
+	"name": "configurable-api-caller",
+	"description": "Lambda that can be configured to regularly call a CH service through cloudwatch rules",
+	"owned_by": "Mike Moore",
+	"calls_via": "Cloudwatch rule",
+	"git_repo": "https://github.com/companieshouse/configurable-api-caller",
+	"specification": "https://github.com/companieshouse/configurable-api-caller/README.md",
+	"public": "false",
+	"users": "public/internal - API/Web",
+	"language": "NodeJS",
+	"integration_outgoing": [
+		"efs-submission-api,CALLS_API"
+	]
 }
