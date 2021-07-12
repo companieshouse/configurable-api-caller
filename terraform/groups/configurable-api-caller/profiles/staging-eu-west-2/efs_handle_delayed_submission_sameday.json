@@ -1,0 +1,13 @@
+{
+    "API_HOST": "internal-api-staging-aws.companieshouse.gov.uk",
+    "API_KEY_REF": "/api-caller/secure-key-test",
+    "IS_SSL": true,
+    "HEADERS": {
+      "headers": {
+        "Authorization": ""
+      }
+    },
+    "ENDPOINT": "/efs-submission-api/events/handle-delayed-submissions/?service=SAMEDAY",
+    "REGION": "eu-west-2",
+    "HTTP_VERB": "POST"
+}
