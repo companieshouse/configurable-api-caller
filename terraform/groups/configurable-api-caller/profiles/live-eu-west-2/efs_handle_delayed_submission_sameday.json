@@ -1,6 +1,6 @@
 {
     "API_HOST": "api.companieshouse.gov.uk",
-    "API_KEY_REF": "/api-caller/secure-key-test",
+    "API_KEY_REF": "/api-caller/secure-application-key",
     "IS_SSL": true,
     "HEADERS": {
       "headers": {
