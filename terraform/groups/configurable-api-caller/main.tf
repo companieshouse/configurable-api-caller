@@ -111,8 +111,8 @@ resource "aws_lambda_permission" "allow_cloudwatch_dissolutions" {
 }
 
 //
-// Workaround code to get multiple environments supported in development account. 
-// Ideally we would loop over a data structure providing vars for terraform resorces and template the json file, 
+// Workaround code to get multiple environments supported in development account.
+// Ideally we would loop over a data structure providing vars for terraform resorces and template the json file,
 // but this would require migrations of terraform state in staging and live. If this needs to be extended further
 // migrating to a more extensible pattern should be considered.
 //
@@ -149,8 +149,8 @@ resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_efs_handle_delayed_
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller_efs_handle_delayed_submission_sameday" {
   count     = var.deploy_to == "development" ? 1 : 0
-  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.id
-  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.name
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
   input     = file("profiles/${var.aws_profile}/efs_handle_delayed_submission_sameday.json")
 }
@@ -161,7 +161,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.arn
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday[0].arn
 }
 
 // VPC
