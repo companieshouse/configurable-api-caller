@@ -4,10 +4,11 @@
   "IS_SSL": true,
   "HEADERS": {
     "headers": {
-      "Authorization": ""
+      "Authorization": "",
+      "Content-Type": "application/json"
     }
   },
-  "ENDPOINT": "/protect-your-details-api/clean-up",
+  "ENDPOINT": "/efs-submission-api/events/submit-files-to-fes",
   "REGION": "eu-west-2",
   "HTTP_VERB": "POST"
 }
