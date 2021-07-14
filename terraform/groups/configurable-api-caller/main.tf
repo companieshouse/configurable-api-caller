@@ -144,7 +144,7 @@ resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_efs_handle_delayed_
   count               = var.deploy_to == "development" ? 1 : 0
   name                = "call_api_caller_lambda_efs_handle_delayed_submission_sameday"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely, which calls EFS API to check for any delayed same day submissions"
-  schedule_expression = "cron(*/15 7-17 * * MON-FRI *)"
+  schedule_expression = "cron(0/15 7-17 ? * MON-FRI *)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller_efs_handle_delayed_submission_sameday" {
