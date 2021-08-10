@@ -161,6 +161,48 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission
   source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.arn
 }
 
+resource "aws_cloudwatch_event_rule" "efs_queue_files" {
+  name                = "efs_queue_files"
+  description         = "Uses ${aws_lambda_function.configurable_api_lambda.function_name} lambda to call EFS Submission API to queue files in EFS document processor"
+  schedule_expression = "cron(* * * * * *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_efs_queue_files" {
+  target_id = aws_cloudwatch_event_rule.efs_queue_files.id
+  rule      = aws_cloudwatch_event_rule.efs_queue_files.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/efs_queue_files.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_efs_queue_files" {
+  statement_id  = "AllowExecutionFromCloudWatchEFS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_queue_files.arn
+}
+
+resource "aws_cloudwatch_event_rule" "efs_submit_files_to_fes" {
+  name                = "efs_submit_files_to_fes"
+  description         = "Uses ${aws_lambda_function.configurable_api_lambda.function_name} lambda to call EFS Submission API to submit files to FES"
+  schedule_expression = "cron(* * * * * *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_efs_submit_files_to_fes" {
+  target_id = aws_cloudwatch_event_rule.efs_submit_files_to_fes.id
+  rule      = aws_cloudwatch_event_rule.efs_submit_files_to_fes.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/efs_submit_files_to_fes.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
+  statement_id  = "AllowExecutionFromCloudWatchEFS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_submit_files_to_fes.arn
+}
+
 // VPC
 
 data "terraform_remote_state" "applications_vpc" {
