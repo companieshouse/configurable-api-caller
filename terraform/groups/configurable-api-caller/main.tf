@@ -154,7 +154,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_efs_handle_delay
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission_sameday" {
-  statement_id  = "AllowExecutionFromCloudWatchEFS"
+  statement_id  = "AllowExecutionFromCloudWatchEFSDelayedSubmission"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
@@ -175,7 +175,7 @@ resource "aws_cloudwatch_event_target" "event_target_efs_queue_files" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_queue_files" {
-  statement_id  = "AllowExecutionFromCloudWatchEFS"
+  statement_id  = "AllowExecutionFromCloudWatchEFSQueue"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
@@ -196,7 +196,7 @@ resource "aws_cloudwatch_event_target" "event_target_efs_submit_files_to_fes" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
-  statement_id  = "AllowExecutionFromCloudWatchEFS"
+  statement_id  = "AllowExecutionFromCloudWatchEFSSubmitToFES"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
