@@ -164,7 +164,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission
 resource "aws_cloudwatch_event_rule" "efs_queue_files" {
   name                = "efs_queue_files"
   description         = "Uses ${aws_lambda_function.configurable_api_lambda.function_name} lambda to call EFS Submission API to queue files in EFS document processor"
-  schedule_expression = "cron(* * * * * *)"
+  schedule_expression = "rate(1 minute)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_efs_queue_files" {
@@ -185,7 +185,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_queue_files" {
 resource "aws_cloudwatch_event_rule" "efs_submit_files_to_fes" {
   name                = "efs_submit_files_to_fes"
   description         = "Uses ${aws_lambda_function.configurable_api_lambda.function_name} lambda to call EFS Submission API to submit files to FES"
-  schedule_expression = "cron(* * * * * *)"
+  schedule_expression = "rate(1 minute)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_efs_submit_files_to_fes" {
