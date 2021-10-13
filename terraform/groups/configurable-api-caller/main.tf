@@ -55,7 +55,7 @@ EOF
 resource "aws_iam_policy" "get_param_policy" {
   name        = "get_param_read"
   description = "Definition for Get Param Store, Systems Manager policy"
-  policy      = file("profiles/${var.aws_profile}/param_policy.json")
+  policy      = file("profiles/${var.aws_profile}/common-${var.aws_region}/param_policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
@@ -86,7 +86,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller" {
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda.id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/input.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/input.json")
 }
 
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_dissolutions" {
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions" {
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/dissolutions_submit.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit.json")
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_dissolutions" {
@@ -128,7 +128,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions_reb
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/dissolutions_submit_rebel1.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_rebel1.json")
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_rebel1" {
@@ -150,7 +150,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_efs_handle_delay
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission_sameday.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/efs_handle_delayed_submission_sameday.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_handle_delayed_submission_sameday.json")
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission_sameday" {
@@ -171,7 +171,7 @@ resource "aws_cloudwatch_event_target" "event_target_efs_queue_files" {
   target_id = aws_cloudwatch_event_rule.efs_queue_files.id
   rule      = aws_cloudwatch_event_rule.efs_queue_files.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/efs_queue_files.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_queue_files.json")
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_queue_files" {
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_event_target" "event_target_efs_submit_files_to_fes" {
   target_id = aws_cloudwatch_event_rule.efs_submit_files_to_fes.id
   rule      = aws_cloudwatch_event_rule.efs_submit_files_to_fes.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/efs_submit_files_to_fes.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_submit_files_to_fes.json")
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
