@@ -140,6 +140,31 @@ resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_rebel1" {
   source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_rebel1[0].arn
 }
 
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_dissolutions_phoenix1" {
+  count               = var.deploy_to == "development" ? 1 : 0
+  name                = "call_api_caller_lambda_dissolutions_phoenix1"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions_phoenix1" {
+  count     = var.deploy_to == "development" ? 1 : 0
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_phoenix1[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_phoenix1[0].name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_phoenix1.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_phoenix1" {
+  count         = var.deploy_to == "development" ? 1 : 0
+  statement_id  = "AllowExecutionFromCloudWatchDissolutionsPhoenix1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_phoenix1[0].arn
+}
+
+
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_efs_handle_delayed_submission_sameday" {
   name                = "call_api_caller_lambda_efs_handle_delayed_submission_sameday"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely, which calls EFS API to check for any delayed same day submissions"
