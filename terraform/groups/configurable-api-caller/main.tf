@@ -157,7 +157,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_dissolutions_pho
 
 resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_phoenix1" {
   count         = var.deploy_to == "development" ? 1 : 0
-  statement_id  = "AllowExecutionFromCloudWatchDissolutionsRebel1"
+  statement_id  = "AllowExecutionFromCloudWatchDissolutionsPhoenix1"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
