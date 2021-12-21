@@ -1,0 +1,13 @@
+{
+    "API_HOST": "internal-api.company-information.service.gov.uk",
+    "API_KEY_REF": "/api-caller/secure-application-key",
+    "IS_SSL": true,
+    "HEADERS": {
+      "headers": {
+        "Authorization": ""
+      }
+    },
+    "ENDPOINT": "/efs-submission-api/events/handle-delayed-submissions",
+    "REGION": "eu-west-2",
+    "HTTP_VERB": "POST"
+}
