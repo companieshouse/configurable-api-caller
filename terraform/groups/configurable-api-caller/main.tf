@@ -250,7 +250,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
 
 resource "aws_cloudwatch_event_rule" "efs_payment_report_finance" {
   name                = "efs_payment_report_finance"
-  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda daily, which calls EFS API to send payment report to finance"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} daily, which calls EFS API to send payment report to finance"
   schedule_expression = "cron(0 02 ? * * *)"
 }
 
@@ -271,7 +271,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_payment_report_finance" {
 
 resource "aws_cloudwatch_event_rule" "efs_payment_report_scotland" {
   name                = "efs_payment_report_scotland"
-  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda daily, which calls EFS API to send payment report to scotland"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} daily, which calls EFS API to send payment report to scotland"
   schedule_expression = "cron(0 02 ? * * *)"
 }
 
@@ -282,7 +282,7 @@ resource "aws_cloudwatch_event_target" "event_target_efs_payment_report_scotland
   input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_payment_report_scotland.json")
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_efs_payment_report_finance" {
+resource "aws_lambda_permission" "allow_cloudwatch_efs_payment_report_scotland" {
   statement_id  = "AllowExecutionFromCloudWatchEFSPaymentReportScotland"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
