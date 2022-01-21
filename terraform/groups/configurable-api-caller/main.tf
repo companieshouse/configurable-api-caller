@@ -76,17 +76,17 @@ resource "aws_iam_role_policy_attachment" "param_read" {
 // Cloudwatch rule event
 // Add further resources here to add new service calls
 
-resource "aws_cloudwatch_event_rule" "call_api_caller_lambda" {
+resource "aws_cloudwatch_event_rule" "protect_your_details_cleanup" {
   name                = "call_api_caller_lambda"
-  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely, which call the Protect your details / Secure API to clean up its data"
   schedule_expression = "rate(5 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller" {
-  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda.id
-  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda.name
+  target_id = aws_cloudwatch_event_rule.protect_your_details_cleanup.id
+  rule      = aws_cloudwatch_event_rule.protect_your_details_cleanup.name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/input.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/protect_your_details_cleanup.json")
 }
 
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_dissolutions" {
