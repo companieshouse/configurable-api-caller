@@ -8,7 +8,7 @@
         "Authorization": ""
       }
     },
-    "ENDPOINT": "/admin/payments/bulk-refunds/process-pending",
+    "ENDPOINT": "/payments/refunds/process-pending",
     "REGION": "eu-west-2",
     "HTTP_VERB": "POST"
 }
