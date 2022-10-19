@@ -1,0 +1,14 @@
+{
+    "API_HOST": "api-payments-staging.company-information.service.gov.uk",
+
+    "API_KEY_REF": "/api-caller/payment-processed-key",
+    "IS_SSL": true,
+    "HEADERS": {
+      "headers": {
+        "Authorization": ""
+      }
+    },
+    "ENDPOINT": "/payments/refunds/process-pending",
+    "REGION": "eu-west-2",
+    "HTTP_VERB": "POST"
+}
