@@ -221,12 +221,14 @@ resource "aws_cloudwatch_event_target" "event_target_efs_submit_files_to_fes" {
 }
 
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_process_pending_refunds" {
+  count               = 1
   name                = "call_api_caller_lambda_process_pending_refunds"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
   schedule_expression = "rate(5 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller_process_pending_refunds" {
+  count     = 1
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_process_pending_refunds[0].id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_process_pending_refunds[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
@@ -234,6 +236,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_process_pending_
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_process_pending_refunds" {
+  count         = 1
   statement_id  = "AllowExecutionFromCloudWatchProcessPendingRefunds"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
