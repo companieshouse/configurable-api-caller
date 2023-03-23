@@ -164,6 +164,26 @@ resource "aws_lambda_permission" "allow_cloudwatch_dissolutions_phoenix1" {
   source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_dissolutions_phoenix1[0].arn
 }
 
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_efs_handle_delayed_submission" {
+  name                = "call_api_caller_lambda_efs_handle_delayed_submission"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda daily, which calls EFS API to check for any delayed submissions"
+  schedule_expression = "cron(0 08 ? * MON-FRI *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_efs_handle_delayed_submission" {
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission.id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_handle_delayed_submission.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_efs_handle_delayed_submission" {
+  statement_id  = "AllowExecutionFromCloudWatchEFSDelayedSubmission"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_efs_handle_delayed_submission.arn
+}
 
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_efs_handle_delayed_submission_sameday" {
   name                = "call_api_caller_lambda_efs_handle_delayed_submission_sameday"
@@ -250,6 +270,48 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.efs_submit_files_to_fes.arn
+}
+
+resource "aws_cloudwatch_event_rule" "efs_payment_report_finance" {
+  name                = "efs_payment_report_finance"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} daily, which calls EFS API to send payment report to finance"
+  schedule_expression = "cron(0 02 ? * * *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_efs_payment_report_finance" {
+  target_id = aws_cloudwatch_event_rule.efs_payment_report_finance.id
+  rule      = aws_cloudwatch_event_rule.efs_payment_report_finance.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_payment_report_finance.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_efs_payment_report_finance" {
+  statement_id  = "AllowExecutionFromCloudWatchEFSPaymentReportFinance"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_payment_report_finance.arn
+}
+
+resource "aws_cloudwatch_event_rule" "efs_payment_report_scotland" {
+  name                = "efs_payment_report_scotland"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} daily, which calls EFS API to send payment report to scotland"
+  schedule_expression = "cron(0 02 ? * * *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_efs_payment_report_scotland" {
+  target_id = aws_cloudwatch_event_rule.efs_payment_report_scotland.id
+  rule      = aws_cloudwatch_event_rule.efs_payment_report_scotland.name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_payment_report_scotland.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_efs_payment_report_scotland" {
+  statement_id  = "AllowExecutionFromCloudWatchEFSPaymentReportScotland"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.efs_payment_report_scotland.arn
 }
 
 // VPC
