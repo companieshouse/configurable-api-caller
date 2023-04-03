@@ -280,6 +280,34 @@ resource "aws_lambda_permission" "allow_cloudwatch_delete_complete_validated_acc
   source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts[0].arn
 }
 
+//
+// Should only be development
+//
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_delete_complete_validated_accounts_aard1" {
+  count               = var.deploy_to == "development" ? 1 : 0 
+  name                = "call_api_caller_lambda_delete_complete_validated_accounts_aard1"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda at 2am everyday"
+  schedule_expression = "cron(0 2 * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_delete_complete_validated_accounts_aard1" {
+  count     = var.deploy_to == "development" ? 1 : 0
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/delete_complete_validated_accounts_aard1.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_delete_complete_validated_accounts_aard1" {
+  count         = var.deploy_to == "development" ? 1 : 0
+  statement_id  = "AllowExecutionFromCloudWatchDeleteCompleteValidatedAccountsAard1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].arn
+}
+
+
 // VPC
 
 data "terraform_remote_state" "applications_vpc" {
