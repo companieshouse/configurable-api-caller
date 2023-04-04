@@ -256,55 +256,55 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
 // Set to only deploy on development. As service is only deployed on development.
 // Future work required to double check staging and live profiles are still correct, when count is changed.
 //
-resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_delete_complete_validated_accounts" {
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_account_validator_cleanup_submissions" {
   count               = var.deploy_to == "development" ? 1 : 0 
-  name                = "call_api_caller_lambda_delete_complete_validated_accounts"
+  name                = "call_api_caller_lambda_account_validator_cleanup_submissions"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda at 2am everyday"
   schedule_expression = "cron(0 2 * * ? *)"
 }
 
-resource "aws_cloudwatch_event_target" "event_target_api_caller_delete_complete_validated_accounts" {
+resource "aws_cloudwatch_event_target" "event_target_api_caller_account_validator_cleanup_submissions" {
   count     = var.deploy_to == "development" ? 1 : 0
-  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts[0].id
-  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts[0].name
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/delete_complete_validated_accounts.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/account_validator_cleanup_submissions.json")
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_delete_complete_validated_accounts" {
+resource "aws_lambda_permission" "allow_cloudwatch_account_validator_cleanup_submissions" {
   count         = var.deploy_to == "development" ? 1 : 0
-  statement_id  = "AllowExecutionFromCloudWatchDeleteCompleteValidatedAccounts"
+  statement_id  = "AllowExecutionFromCloudWatchAccountValidatorCleanupSubmissions"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts[0].arn
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions[0].arn
 }
 
 //
 // Should only be development
 //
-resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_delete_complete_validated_accounts_aard1" {
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_account_validator_cleanup_submissions_aard1" {
   count               = var.deploy_to == "development" ? 1 : 0 
-  name                = "call_api_caller_lambda_delete_complete_validated_accounts_aard1"
+  name                = "call_api_caller_lambda_account_validator_cleanup_submissions_aard1"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda at 2am everyday"
   schedule_expression = "cron(0 2 * * ? *)"
 }
 
-resource "aws_cloudwatch_event_target" "event_target_api_caller_delete_complete_validated_accounts_aard1" {
+resource "aws_cloudwatch_event_target" "event_target_api_caller_account_validator_cleanup_submissions_aard1" {
   count     = var.deploy_to == "development" ? 1 : 0
-  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].id
-  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].name
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions_aard1[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions_aard1[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
-  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/delete_complete_validated_accounts_aard1.json")
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/account_validator_cleanup_submissions_aard1.json")
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_delete_complete_validated_accounts_aard1" {
+resource "aws_lambda_permission" "allow_cloudwatch_account_validator_cleanup_submissions_aard1" {
   count         = var.deploy_to == "development" ? 1 : 0
-  statement_id  = "AllowExecutionFromCloudWatchDeleteCompleteValidatedAccountsAard1"
+  statement_id  = "AllowExecutionFromCloudWatchAccountValidatorCleanupSubmissionsAard1"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_delete_complete_validated_accounts_aard1[0].arn
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions_aard1[0].arn
 }
 
 
