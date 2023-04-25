@@ -244,6 +244,30 @@ resource "aws_lambda_permission" "allow_cloudwatch_process_pending_refunds" {
   source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_process_pending_refunds[0].arn
 }
 
+resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_payments_status_check" {
+  count               = 1
+  name                = "call_api_caller_lambda_payments_status_check"
+  description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda routinely"
+  schedule_expression = "rate(10 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "event_target_api_caller_payments_status_check" {
+  count     = 1
+  target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_payments_status_check[0].id
+  rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_payments_status_check[0].name
+  arn       = aws_lambda_function.configurable_api_lambda.arn
+  input     = file("profiles/${var.aws_profile}/common-${var.aws_region}/payments_status_check.json")
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_payments_status_check" {
+  count         = 1
+  statement_id  = "AllowExecutionFromCloudWatchPaymentsStatusCheck"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.configurable_api_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_api_caller_lambda_payments_status_check[0].arn
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
   statement_id  = "AllowExecutionFromCloudWatchEFSSubmitToFES"
   action        = "lambda:InvokeFunction"

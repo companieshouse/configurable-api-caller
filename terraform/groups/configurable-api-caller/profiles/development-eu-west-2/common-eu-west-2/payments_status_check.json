@@ -1,0 +1,14 @@
+{
+    "API_HOST": "api-payments.cidev.aws.chdev.org",
+
+    "API_KEY_REF": "/api-caller/payment-processed-key",
+    "IS_SSL": true,
+    "HEADERS": {
+      "headers": {
+        "Authorization": ""
+      }
+    },
+    "ENDPOINT": "/private/payments/status-check",
+    "REGION": "eu-west-2",
+    "HTTP_VERB": "POST"
+}
