@@ -1,3 +1,17 @@
+terraform {
+  required_version = "~> 1.3.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.54.0"
+    }
+    vault = {
+      source  = "hashicorp/vault"
+      version = "~> 3.18.0"
+    }
+  }
+}
+
 provider "aws" {
   region = var.aws_region
 }
@@ -17,7 +31,7 @@ resource "aws_lambda_function" "configurable_api_lambda" {
   timeout       = 15
   vpc_config {
     security_group_ids = [aws_security_group.allow_calls_to_api_caller.id]
-    subnet_ids = split(",", data.terraform_remote_state.applications_vpc.outputs.application_ids)
+    subnet_ids         = split(",", data.terraform_remote_state.applications_vpc.outputs.application_ids)
   }
 }
 
@@ -32,7 +46,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 // Role
 
 resource "aws_iam_role" "lambda_role" {
-  name = "allow-lambda-role"
+  name               = "allow-lambda-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
