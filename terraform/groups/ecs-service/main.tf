@@ -1,10 +1,7 @@
-provider "aws" {
-  region = var.aws_region
-}
 
 terraform {
   backend "s3" {}
-  required_version = "~> 1.3"
+  required_version = "~> 0.13"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -317,9 +314,9 @@ resource "aws_lambda_permission" "allow_cloudwatch_account_validator_cleanup_sub
 data "terraform_remote_state" "applications_vpc" {
   backend = "s3"
   config = {
-    bucket = "${var.remote_state_bucket}"
+    bucket = var.remote_state_bucket
     key    = "${var.state_prefix}/${var.deploy_to}/${var.deploy_to}.tfstate"
-    region = "${var.aws_region}"
+    region = var.aws_region
   }
 }
 
