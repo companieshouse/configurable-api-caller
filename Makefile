@@ -24,7 +24,7 @@ sonar:
 
 .PHONY: test
 test:
-	npm run test:coverage
+	npm run test
 
 .PHONY: test-unit
 test-unit:
@@ -49,5 +49,4 @@ endif
 	cd $(tmpdir) && zip -r ../$(artifact_name)-$(version).zip .
 	rm -rf $(tmpdir)
 
-.PHONY: dist
-dist: lint test-unit clean package
+
