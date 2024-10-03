@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:watch": "NODE_ENV=development nodemon",
+    "test": "",
     "build": "tsc",
     "lint": "tslint -p .",
     "sonarqube": "sonar-scanner"
