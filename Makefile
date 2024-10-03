@@ -9,7 +9,8 @@ clean:
 	rm -rf ./dist
 
 .PHONY: build
-build:  install
+build:
+	npm i
 	npm run build
 
 .PHONY: install
