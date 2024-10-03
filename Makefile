@@ -6,16 +6,33 @@ all: build
 .PHONY: clean
 clean:
 	rm -f ./$(artifact_name)-*.zip
-	rm -rf ./dist
+	rm -rf ./build-*
+	rm -f ./build.log
 
 .PHONY: build
 build:
 	npm i
 	npm run build
 
-.PHONY: install
-install:
-	npm i
+.PHONY: lint
+lint:
+	npm run lint
+
+.PHONY: sonar
+sonar:
+	npm run sonarqube
+
+.PHONY: test
+test:
+	npm run test
+
+.PHONY: test-unit
+test-unit:
+	npm run test
+
+.PHONY: security-check
+security-check:
+	npm audit
 
 .PHONY: package
 package: build
@@ -31,3 +48,5 @@ endif
 	rm $(tmpdir)/package.json $(tmpdir)/package-lock.json
 	cd $(tmpdir) && zip -r ../$(artifact_name)-$(version).zip .
 	rm -rf $(tmpdir)
+
+
