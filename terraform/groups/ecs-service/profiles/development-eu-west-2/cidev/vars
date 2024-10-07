@@ -1,7 +1,5 @@
 aws_profile  = "development-eu-west-2"
 aws_region   = "eu-west-2"
-s3_bucket    = "development-eu-west-2.release.ch.gov.uk"
-s3_key       = "configurable-api-caller/configurable-api-caller.zip"
 
 remote_state_bucket = "ch-development-terraform-state-london"
 state_prefix = "env:/development"

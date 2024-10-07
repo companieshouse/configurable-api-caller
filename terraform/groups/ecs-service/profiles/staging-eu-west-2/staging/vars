@@ -1,7 +1,5 @@
 aws_profile  = "staging-eu-west-2"
 aws_region   = "eu-west-2"
-s3_bucket    = "ch-service-staging-release.ch.gov.uk"
-s3_key       = "configurable-api-caller/configurable-api-caller.zip"
 
 remote_state_bucket = "ch-service-staging-terraform-state"
 state_prefix = "env:/staging"
