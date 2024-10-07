@@ -17,7 +17,7 @@ terraform {
 // Lambda
 resource "aws_lambda_function" "configurable_api_lambda" {
   function_name = "configurable-api-caller"
-  s3_bucket     = var.s3_bucket
+  s3_bucket     = var.release_bucket_name
   s3_key        = var.s3_key
   role          = aws_iam_role.lambda_role.arn
   handler       = "dist/index.handler"

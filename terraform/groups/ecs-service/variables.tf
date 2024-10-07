@@ -6,7 +6,7 @@ variable "aws_region" {
   type = string
 }
 
-variable "s3_bucket" {
+variable "release_bucket_name" {
   type = string
 }
 
@@ -23,5 +23,5 @@ variable "state_prefix" {
 }
 
 variable "deploy_to" {
-  type= string
+  type = string
 }
