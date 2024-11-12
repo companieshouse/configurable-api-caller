@@ -1,5 +1,5 @@
 {
-    "API_HOST": "api-staging.company-information.service.gov.uk",
+    "API_HOST": "internal-api-staging.company-information.service.gov.uk",
     "API_KEY_REF": "/api-caller/secure-application-key",
     "IS_SSL": true,
     "HEADERS": {
@@ -7,7 +7,7 @@
         "Authorization": ""
       }
     },
-    "ENDPOINT": "/validate/cleanup-submissions",
+    "ENDPOINT": "/account-validator/validate/cleanup-submissions",
     "REGION": "eu-west-2",
     "HTTP_VERB": "DELETE"
 }
