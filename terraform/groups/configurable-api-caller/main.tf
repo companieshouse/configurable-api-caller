@@ -281,14 +281,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_efs_submit_files_to_fes" {
 // Future work required to double check staging and live profiles are still correct, when count is changed.
 //
 resource "aws_cloudwatch_event_rule" "call_api_caller_lambda_account_validator_cleanup_submissions" {
-  count               = var.deploy_to == "development" ? 1 : 0 
+  count               = var.deploy_to != "live" ? 1 : 0 
   name                = "call_api_caller_lambda_account_validator_cleanup_submissions"
   description         = "Cloudwatch event to call ${aws_lambda_function.configurable_api_lambda.function_name} lambda at 2am everyday (7pm in dev environments)"
   schedule_expression = var.deploy_to == "live" ? "cron(0 2 * * ? *)" : "cron(0 19 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "event_target_api_caller_account_validator_cleanup_submissions" {
-  count     = var.deploy_to == "development" ? 1 : 0
+  count     = var.deploy_to != "live" ? 1 : 0
   target_id = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions[0].id
   rule      = aws_cloudwatch_event_rule.call_api_caller_lambda_account_validator_cleanup_submissions[0].name
   arn       = aws_lambda_function.configurable_api_lambda.arn
@@ -296,7 +296,7 @@ resource "aws_cloudwatch_event_target" "event_target_api_caller_account_validato
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_account_validator_cleanup_submissions" {
-  count         = var.deploy_to == "development" ? 1 : 0
+  count         = var.deploy_to != "live" ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatchAccountValidatorCleanupSubmissions"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.configurable_api_lambda.function_name
