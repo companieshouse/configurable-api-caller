@@ -1,5 +1,5 @@
 {
-    "API_HOST": "https://internal-api.companieshouse.gov.uk",
+    "API_HOST": "internal-api.companieshouse.gov.uk",
     "API_KEY_REF": "/api-caller/secure-application-key",
     "IS_SSL": true,
     "HEADERS": {
