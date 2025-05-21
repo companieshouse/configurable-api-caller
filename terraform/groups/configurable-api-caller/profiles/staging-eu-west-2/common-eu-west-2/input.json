@@ -1,5 +1,5 @@
 {
-  "API_HOST": "api-staging-aws.companieshouse.gov.uk",
+  "API_HOST": "api-staging.company-information.service.gov.uk",
   "API_KEY_REF": "/api-caller/secure-application-key",
   "IS_SSL": true,
   "HEADERS": {
