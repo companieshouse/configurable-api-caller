@@ -7,7 +7,7 @@
         "Authorization": ""
       }
     },
-    "ENDPOINT": "/efs-submission-api/events/handle-delayed-submissions/?service=SAMEDAY",
+    "ENDPOINT": "/efs-submission-api/events/handle-delayed-submissions?service=SAMEDAY",
     "REGION": "eu-west-2",
     "HTTP_VERB": "POST"
 }
