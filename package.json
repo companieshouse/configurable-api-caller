@@ -4,7 +4,7 @@
   "description": "Standalone API requests with configurable options for resource and authorisation, designed to be deployed to lambda for schedulable events",
   "main": "index.js",
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "start:watch": "NODE_ENV=development nodemon",
