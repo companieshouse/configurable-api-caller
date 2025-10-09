@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Standalone API requests with configurable options for resource and authorisation, designed to be deployed to lambda for schedulable events",
   "main": "index.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start:watch": "NODE_ENV=development nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
