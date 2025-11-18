@@ -1,8 +1,9 @@
-aws_profile  = "development-eu-west-2"
-aws_region   = "eu-west-2"
-s3_bucket    = "development-eu-west-2.release.ch.gov.uk"
-s3_key       = "configurable-api-caller/configurable-api-caller.zip"
+aws_profile = "development-eu-west-2"
+aws_region  = "eu-west-2"
 
-remote_state_bucket = "ch-development-terraform-state-london"
-state_prefix = "env:/development"
-deploy_to    = "development"
+cron_account_validator_cleanup_submissions = "cron(0 19 * * ? *)"
+
+environment = "development"
+
+release_bucket_name  = "development-eu-west-2.release.ch.gov.uk"
+release_artifact_key = "configurable-api-caller/configurable-api-caller.zip"

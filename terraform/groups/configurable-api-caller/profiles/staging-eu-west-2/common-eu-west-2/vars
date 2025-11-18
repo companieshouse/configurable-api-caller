@@ -1,8 +1,9 @@
-aws_profile  = "staging-eu-west-2"
-aws_region   = "eu-west-2"
-s3_bucket    = "ch-service-staging-release.ch.gov.uk"
-s3_key       = "configurable-api-caller/configurable-api-caller.zip"
+aws_profile = "staging-eu-west-2"
+aws_region  = "eu-west-2"
 
-remote_state_bucket = "ch-service-staging-terraform-state"
-state_prefix = "env:/staging"
-deploy_to    = "staging"
+cron_account_validator_cleanup_submissions = "cron(0 19 * * ? *)"
+
+environment = "staging"
+
+release_bucket_name  = "ch-service-staging-release.ch.gov.uk"
+release_artifact_key = "configurable-api-caller/configurable-api-caller.zip"
