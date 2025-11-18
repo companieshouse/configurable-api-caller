@@ -1,6 +1,6 @@
 locals {
 
-  stack_name                   = "utility-stack"
+  stack_name                   = "utility"
   lambda_env_vars              = merge(local.service_secrets, var.open_lambda_environment_variables)
   lambda_vpc_access_subnet_ids = data.aws_subnets.application.ids
   application_subnet_pattern   = local.stack_secrets["application_subnet_pattern"]
