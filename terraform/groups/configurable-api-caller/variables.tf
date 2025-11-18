@@ -61,7 +61,7 @@ variable open_lambda_environment_variables {
   default     = {}
 }
 
-variable "function_name" {
+variable "service" {
   description = "The name of the lambda function."
   type        = string
   default     = "configurable-api-caller"

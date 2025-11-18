@@ -3,7 +3,7 @@ module "lambda" {
   source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=feature/dvop-3499-updaate-cloudwatch-event-target-inputs-and-event-rule-outputs"
 
   environment           = var.environment
-  function_name         = var.function_name
+  function_name         = var.service
   lambda_runtime        = var.lambda_runtime
   lambda_handler        = var.handler
 
