@@ -16,49 +16,49 @@ locals {
       name                = "call_api_caller_lambda"
       description         = "Call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(5 minutes)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/input.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/input.json")
     },
     {
       name                = "call_api_caller_lambda_dissolutions"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit.json")
     },
     {
       name                = "call_api_caller_lambda_efs_handle_delayed_submission_sameday"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely, which calls EFS API to check for any delayed same day submissions"
       schedule_expression = "cron(0/15 7-17 ? * MON-FRI *)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_handle_delayed_submission_sameday.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_handle_delayed_submission_sameday.json")
     },
     {
       name                = "efs_queue_files"
       description         = "Uses ${module.lambda.lambda_function_name} lambda to call EFS Submission API to queue files in EFS document processor"
       schedule_expression = "rate(1 minute)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_queue_files.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_queue_files.json")
     },
     {
       name                = "efs_submit_files_to_fes"
       description         = "Uses ${module.lambda.lambda_function_name} lambda to call EFS Submission API to submit files to FES"
       schedule_expression = "rate(1 minute)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_submit_files_to_fes.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/efs_submit_files_to_fes.json")
     },
     {
       name                = "call_api_caller_lambda_process_pending_refunds"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(5 minutes)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/process_pending_refunds.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/process_pending_refunds.json")
     },
     {
       name                = "call_api_caller_lambda_payments_status_check"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(10 minutes)"
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/payments_status_check.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/payments_status_check.json")
     },
     {
       name                = "call_api_caller_lambda_account_validator_cleanup_submissions"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda at 2am everyday (7pm in dev environments)"
       schedule_expression = var.cron_account_validator_cleanup_submissions
-      target              = file("profiles/${var.aws_profile}/common-${var.aws_region}/account_validator_cleanup_submissions.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/account_validator_cleanup_submissions.json")
     }
   ]
 
