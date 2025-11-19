@@ -1,9 +1,9 @@
 data "vault_generic_secret" "stack_secrets" {
-  path = "applications/${var.aws_profile}/${var.environment}/${local.stack_name}-stack"
+  path = "applications/${var.aws_account}/${var.environment}/${local.stack_name}-stack"
 }
 
 data "vault_generic_secret" "service_secrets" {
-  path = "applications/${var.aws_profile}/${var.environment}/${local.stack_name}-stack/${var.service}"
+  path = "applications/${var.aws_account}/${var.environment}/${local.stack_name}-stack/${var.service}"
 }
 
 data "aws_vpc" "vpc" {
@@ -27,5 +27,5 @@ data "aws_subnets" "application" {
 
 data "aws_iam_policy_document" "get_param_read_policy" {
   # Definition for Get Param Store, Systems Manager policy
-  source_policy_documents = [file("profiles/${var.aws_profile}/common-${var.aws_region}/param_policy.json")]
+  source_policy_documents = [file("profiles/${var.aws_account}/common-${var.aws_region}/param_policy.json")]
 }

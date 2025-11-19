@@ -34,10 +34,10 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aws_profile"></a> [aws\_profile](#input\_aws\_profile) | The AWS profile to use for deployment. | `string` | n/a | yes |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region | `string` | n/a | yes |
+| <a name="input_aws_account"></a> [aws\_account](#input\_aws\_account) | The AWS account to deploy in to | `string` | n/a | yes |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | The AWS region that resources will be created within | `string` | n/a | yes |
 | <a name="input_cron_account_validator_cleanup_submissions"></a> [cron\_account\_validator\_cleanup\_submissions](#input\_cron\_account\_validator\_cleanup\_submissions) | The cron string for the account validator cleanup submission cloudwatch event rule. | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | The name of the environment this cluster is part of e.g. live, staging, dev. etc. | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | The name of the specific environment being deployed | `string` | n/a | yes |
 | <a name="input_handler"></a> [handler](#input\_handler) | The entrypoint in the Lambda function. | `string` | `"dist/index.handler"` | no |
 | <a name="input_hashicorp_vault_password"></a> [hashicorp\_vault\_password](#input\_hashicorp\_vault\_password) | The password used when retrieving configuration from Hashicorp Vault | `string` | n/a | yes |
 | <a name="input_hashicorp_vault_username"></a> [hashicorp\_vault\_username](#input\_hashicorp\_vault\_username) | The username used when retrieving configuration from Hashicorp Vault | `string` | n/a | yes |
@@ -47,7 +47,7 @@
 | <a name="input_open_lambda_environment_variables"></a> [open\_lambda\_environment\_variables](#input\_open\_lambda\_environment\_variables) | Lambda environment variables that do not require encryption. | `map(string)` | `{}` | no |
 | <a name="input_release_artifact_key"></a> [release\_artifact\_key](#input\_release\_artifact\_key) | The release artifact key for the Lambda function | `string` | n/a | yes |
 | <a name="input_release_bucket_name"></a> [release\_bucket\_name](#input\_release\_bucket\_name) | The S3 release bucket location containing the function code. | `string` | n/a | yes |
-| <a name="input_service"></a> [service](#input\_service) | The name of the lambda function. | `string` | `"configurable-api-caller"` | no |
+| <a name="input_service"></a> [service](#input\_service) | The name of service being deployed | `string` | `"configurable-api-caller"` | no |
 | <a name="input_timeout_seconds"></a> [timeout\_seconds](#input\_timeout\_seconds) | The amount of time the Lambda function has to run in seconds. | `string` | `"15"` | no |
 
 ## Outputs

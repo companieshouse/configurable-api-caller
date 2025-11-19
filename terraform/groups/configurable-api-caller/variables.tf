@@ -1,70 +1,70 @@
-variable "aws_profile" {
+variable "aws_account" {
+  description = "The AWS account to deploy in to"
   type        = string
-  description = "The AWS profile to use for deployment."
 }
 
 variable "aws_region" {
+  description = "The AWS region that resources will be created within"
   type        = string
-  description = "AWS Region"
+}
+
+variable "service" {
+  default     = "configurable-api-caller"
+  description = "The name of service being deployed"
+  type        = string
 }
 
 variable "environment" {
-  description = "The name of the environment this cluster is part of e.g. live, staging, dev. etc."
+  description = "The name of the specific environment being deployed"
   type        = string
 }
 
 variable "timeout_seconds" {
-  type        = string
   default     = "15"
   description = "The amount of time the Lambda function has to run in seconds."
+  type        = string
 }
 
 variable "handler" {
-  type        = string
   default     = "dist/index.handler"
   description = "The entrypoint in the Lambda function."
+  type        = string
 }
 
 variable "lambda_runtime" {
-  type        = string
-  description = "The lambda runtime to run the application"
   default     = "nodejs22.x"
+  description = "The lambda runtime to run the application"
+  type        = string
 }
 
 variable "release_bucket_name" {
-  type        = string
   description = "The S3 release bucket location containing the function code."
+  type        = string
 }
 
 variable "release_artifact_key" {
-  type        = string
   description = "The release artifact key for the Lambda function"
+  type        = string
 }
 
 # this was not specified in the original lambda - is 320 ok ?
 variable "memory_megabytes" {
-  type        = string
   default     = "320"
   description = "The amount of memory to allocate to the Lambda function"
+  type        = string
 }
 
 # this was not specified in the original lambda - is 7 ok ?
 variable "lambda_logs_retention_days" {
-  type        = number
-  description = "The number of days to retain Lambda logs in CloudWatch"
   default     = 7
+  description = "The number of days to retain Lambda logs in CloudWatch"
+  type        = number
 }
 
 variable open_lambda_environment_variables {
-  type        = map(string)
-  description = "Lambda environment variables that do not require encryption."
   default     = {}
-}
-
-variable "service" {
-  description = "The name of the lambda function."
-  type        = string
-  default     = "configurable-api-caller"
+  description = "Lambda environment variables that do not require encryption."
+  type        = map(string)
 }
 
 variable "cron_account_validator_cleanup_submissions" {
