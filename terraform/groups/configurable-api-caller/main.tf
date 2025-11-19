@@ -17,7 +17,6 @@ module "lambda" {
   lambda_env_vars = local.lambda_env_vars
 
   lambda_cloudwatch_event_rules = concat(local.cloudwatch_event_rules_permanent, local.cloudwatch_event_rules_development_only)
-  lambda_permissions = concat(local.lambda_permissions_permanent, local.lambda_permissions_development_only)
 
   additional_policies = local.additional_iam_policies_json
 
