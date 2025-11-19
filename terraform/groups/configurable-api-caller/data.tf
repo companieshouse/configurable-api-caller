@@ -27,5 +27,5 @@ data "aws_subnets" "application" {
 
 data "aws_iam_policy_document" "get_param_read_policy" {
   # Definition for Get Param Store, Systems Manager policy
-  source_json = file("profiles/${var.aws_profile}/common-${var.aws_region}/param_policy.json")
+  source_policy_documents = [file("profiles/${var.aws_profile}/common-${var.aws_region}/param_policy.json")]
 }

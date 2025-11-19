@@ -67,13 +67,13 @@ locals {
       name                = "call_api_caller_lambda_dissolutions_rebel1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      input               = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_rebel1.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_rebel1.json")
     },
     {
       name                = "call_api_caller_lambda_dissolutions_phoenix1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      input               = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_phoenix1.json")
+      target_input        = file("profiles/${var.aws_profile}/common-${var.aws_region}/dissolutions_submit_phoenix1.json")
     }
   ] : []
 
@@ -100,7 +100,7 @@ locals {
     },
     {
       statement_id  = "AllowExecutionFromCloudWatchEFSSubmitToFES"
-      source_arn    = module.lambda.event_rule_arn_map["aws_cloudwatch_event_rule.efs_submit_files_to_fes"]
+      source_arn    = module.lambda.event_rule_arn_map["efs_submit_files_to_fes"]
     },
     {
       statement_id  = "AllowExecutionFromCloudWatchAccountValidatorCleanupSubmissions"
