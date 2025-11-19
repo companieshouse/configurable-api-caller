@@ -25,7 +25,15 @@ data "aws_subnets" "application" {
   }
 }
 
-data "aws_iam_policy_document" "get_param_read_policy" {
-  # Definition for Get Param Store, Systems Manager policy
-  source_policy_documents = [file("profiles/${var.aws_account}/common-${var.aws_region}/param_policy.json")]
+data "aws_iam_policy_document" "get_param_store_systems_manager_policy" {
+  statement {
+    effect  = "Allow"
+    actions = [
+      "ssm:GetParameterHistory",
+      "ssm:GetParametersByPath",
+      "ssm:GetParameters",
+      "ssm:GetParameter"
+    ]
+    resources = ["*"]
+  }
 }

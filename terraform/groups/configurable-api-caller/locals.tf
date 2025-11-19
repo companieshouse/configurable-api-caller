@@ -9,7 +9,7 @@ locals {
   stack_secrets   = data.vault_generic_secret.stack_secrets.data
   service_secrets = data.vault_generic_secret.service_secrets.data
 
-  additional_iam_policies_json = [data.aws_iam_policy_document.get_param_read_policy.json]
+  additional_iam_policies_json = [data.aws_iam_policy_document.get_param_store_systems_manager_policy.json]
 
   cloudwatch_event_rules_permanent = [
     {
