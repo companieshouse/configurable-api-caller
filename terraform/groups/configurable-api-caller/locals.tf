@@ -17,49 +17,49 @@ locals {
       name                = "call-api-caller-lambda"
       description         = "Call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(5 minutes)"
-      input               = data.local_file.input.content
+      target_input        = data.local_file.input.content
     },
     {
       name                = "call-api-caller-lambda-dissolutions"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      input               = data.local_file.dissolutions_submit.content
+      target_input        = data.local_file.dissolutions_submit.content
     },
     {
       name                = "call-api-caller-lambda-efs-handle-delayed-submission-sameday"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely, which calls EFS API to check for any delayed same day submissions"
       schedule_expression = "cron(0/15 7-17 ? * MON-FRI *)"
-      input               = data.local_file.efs_handle_delayed_submission_sameday.content
+      target_input        = data.local_file.efs_handle_delayed_submission_sameday.content
     },
     {
       name                = "efs-queue-files"
       description         = "Uses ${module.lambda.lambda_function_name} lambda to call EFS Submission API to queue files in EFS document processor"
       schedule_expression = "rate(1 minute)"
-      input               = data.local_file.efs_queue_files.content
+      target_input        = data.local_file.efs_queue_files.content
     },
     {
       name                = "efs-submit-files-to-fes"
       description         = "Uses ${module.lambda.lambda_function_name} lambda to call EFS Submission API to submit files to FES"
       schedule_expression = "rate(1 minute)"
-      input               = data.local_file.efs_submit_files_to_fes.content
+      target_input        = data.local_file.efs_submit_files_to_fes.content
     },
     {
       name                = "call-api-caller-lambda-process-pending-refunds"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(5 minutes)"
-      input               = data.local_file.process_pending_refunds.content
+      target_input        = data.local_file.process_pending_refunds.content
     },
     {
       name                = "call-api-caller-lambda-payments-status-check"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(10 minutes)"
-      input               = data.local_file.payments_status_check.content
+      target_input        = data.local_file.payments_status_check.content
     },
     {
       name                = "call-api-caller-lambda-account-validator-cleanup-submissions"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda at 2am everyday (7pm in dev environments)"
       schedule_expression = var.cron_account_validator_cleanup_submissions
-      input               = data.local_file.account_validator_cleanup_submissions.content
+      target_input        = data.local_file.account_validator_cleanup_submissions.content
     }
   ]
 
@@ -68,13 +68,13 @@ locals {
       name                = "call-api-caller-lambda-dissolutions-rebel1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      input               = data.local_file.dissolutions_submit_rebel1.content
+      target_input        = data.local_file.dissolutions_submit_rebel1.content
     },
     {
       name                = "call-api-caller-lambda-dissolutions-phoenix1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      input               = data.local_file.dissolutions_submit_phoenix1.content
+      target_input        = data.local_file.dissolutions_submit_phoenix1.content
     }
   ] : []
 }
