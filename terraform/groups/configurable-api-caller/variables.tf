@@ -21,9 +21,9 @@ variable "environment" {
 }
 
 variable "timeout_seconds" {
-  default     = "15"
+  default     = 15
   description = "The amount of time the Lambda function has to run in seconds."
-  type        = string
+  type        = number
 }
 
 variable "handler" {
@@ -50,9 +50,9 @@ variable "release_artifact_key" {
 
 # this was not specified in the original lambda - is 320 ok ?
 variable "memory_megabytes" {
-  default     = "320"
+  default     = 320
   description = "The amount of memory to allocate to the Lambda function"
-  type        = string
+  type        = number
 }
 
 # this was not specified in the original lambda - is 7 ok ?
