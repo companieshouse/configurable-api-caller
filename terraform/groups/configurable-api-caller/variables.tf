@@ -4,6 +4,7 @@ variable "aws_account" {
 }
 
 variable "aws_region" {
+  default     = "eu-west-2"
   description = "The AWS region that resources will be created within"
   type        = string
 }

@@ -1,5 +1,4 @@
 aws_account = "staging-eu-west-2"
-aws_region  = "eu-west-2"
 
 cron_account_validator_cleanup_submissions = "cron(0 19 * * ? *)"
 
