@@ -6,6 +6,10 @@ data "vault_generic_secret" "service_secrets" {
   path = "applications/${var.aws_account}/${var.environment}/${local.stack_name}-stack/${var.service}"
 }
 
+data "aws_kms_key" "kms_key" {
+  key_id = local.kms_alias
+}
+
 data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Name"
@@ -35,7 +39,8 @@ data "aws_iam_policy_document" "get_param_store_systems_manager_policy" {
       "ssm:GetParameter"
     ]
     resources = [
-      "arn:aws:ssm:eu-west-2:169942020521:parameter/configurable-api-caller/*"
+      # todo - update account here
+      "arn:aws:ssm:eu-west-2:169942020521:parameter/api-caller/*"
     ]
   }
 }

@@ -21,6 +21,14 @@ provider "aws" {
   region = var.aws_region
 }
 
+module "secrets" {
+  source = "git@github.com:companieshouse/terraform-modules//aws/parameter-store?ref=1.0.360"
+
+  name_prefix = "api-caller"
+  kms_key_id  = data.aws_kms_key.kms_key.id
+  secrets     = nonsensitive(local.service_secrets)
+}
+
 module "lambda" {
 #  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.342"
   source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=feature/dvop-3499-updaate-cloudwatch-event-target-inputs-and-event-rule-outputs"
@@ -36,8 +44,6 @@ module "lambda" {
   lambda_memory_size         = var.memory_megabytes
   lambda_timeout_seconds     = var.timeout_seconds
   lambda_logs_retention_days = var.lambda_logs_retention_days
-
-  lambda_env_vars = local.lambda_env_vars
 
   lambda_cloudwatch_event_rules = concat(local.cloudwatch_event_rules_permanent, local.cloudwatch_event_rules_development_only)
 
