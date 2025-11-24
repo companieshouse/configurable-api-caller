@@ -62,12 +62,6 @@ variable "lambda_logs_retention_days" {
   type        = number
 }
 
-variable open_lambda_environment_variables {
-  default     = {}
-  description = "Lambda environment variables that do not require encryption."
-  type        = map(string)
-}
-
 variable "cron_account_validator_cleanup_submissions" {
   description = "The cron string for the account validator cleanup submission cloudwatch event rule."
   type        = string
