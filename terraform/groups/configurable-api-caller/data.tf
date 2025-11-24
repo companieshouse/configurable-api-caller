@@ -10,6 +10,8 @@ data "aws_kms_key" "kms_key" {
   key_id = local.kms_alias
 }
 
+data "aws_caller_identity" "aws_identity" {}
+
 data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Name"
@@ -39,8 +41,7 @@ data "aws_iam_policy_document" "get_param_store_systems_manager_policy" {
       "ssm:GetParameter"
     ]
     resources = [
-      # todo - update account here
-      "arn:aws:ssm:eu-west-2:169942020521:parameter/api-caller/*"
+      "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.aws_identity.account_id}:parameter/api-caller/*"
     ]
   }
 }
