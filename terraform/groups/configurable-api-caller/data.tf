@@ -34,7 +34,9 @@ data "aws_iam_policy_document" "get_param_store_systems_manager_policy" {
       "ssm:GetParameters",
       "ssm:GetParameter"
     ]
-    resources = ["*"]
+    resources = [
+      "arn:aws:ssm:eu-west-2:169942020521:parameter/configurable-api-caller/*"
+    ]
   }
 }
 
