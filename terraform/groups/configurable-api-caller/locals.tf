@@ -3,7 +3,7 @@ locals {
   stack_name                   = "utility"
   lambda_env_vars              = merge(local.service_secrets, var.open_lambda_environment_variables)
   lambda_vpc_access_subnet_ids = data.aws_subnets.application.ids
-  json_folder                  = "profiles/${var.aws_account}/common-${var.aws_region}"
+  json_folder                  = "input_json/${var.aws_account}"
   application_subnet_pattern   = local.stack_secrets["application_subnet_pattern"]
   vpc_name                     = local.stack_secrets["vpc_name"]
 
