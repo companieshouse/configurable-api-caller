@@ -4,5 +4,5 @@ cron_account_validator_cleanup_submissions = "cron(0 19 * * ? *)"
 
 environment = "staging"
 
-release_bucket_name  = "ch-service-staging-release.ch.gov.uk"
+release_bucket_name  = "staging-eu-west-2.release.ch.gov.uk"
 release_artifact_key = "configurable-api-caller/configurable-api-caller.zip"
