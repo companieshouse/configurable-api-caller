@@ -8,6 +8,10 @@ clean:
 	rm -f ./$(artifact_name)-*.zip
 	rm -rf ./dist
 
+.PHONY: security-check
+security-check:
+	npm audit
+
 .PHONY: build
 build:  install
 	npm run build
