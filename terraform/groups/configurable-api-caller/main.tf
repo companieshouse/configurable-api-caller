@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 module "secrets" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/parameter-store?ref=1.0.360"
+  source = "git@github.com:companieshouse/terraform-modules//aws/parameter-store?ref=1.0.361"
 
   name_prefix = "api-caller"
   kms_key_id  = data.aws_kms_key.kms_key.id
