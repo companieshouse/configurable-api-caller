@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 module "secrets" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/parameter-store?ref=1.0.361"
+  source = "git@github.com:companieshouse/terraform-modules//aws/parameter-store?ref=1.0.360"
 
   name_prefix = "api-caller"
   kms_key_id  = data.aws_kms_key.kms_key.id
@@ -30,7 +30,8 @@ module "secrets" {
 }
 
 module "lambda" {
-  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.361"
+#  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.361"
+  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=feature/dvop-3499-updaate-cloudwatch-event-target-inputs-and-event-rule-outputs"
 
   environment           = var.environment
   function_name         = var.service
