@@ -30,8 +30,7 @@ module "secrets" {
 }
 
 module "lambda" {
-#  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.342"
-  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=feature/dvop-3499-updaate-cloudwatch-event-target-inputs-and-event-rule-outputs"
+  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.361"
 
   environment           = var.environment
   function_name         = var.service
