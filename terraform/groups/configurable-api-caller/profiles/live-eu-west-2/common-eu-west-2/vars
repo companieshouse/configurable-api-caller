@@ -3,7 +3,3 @@ aws_account = "live-eu-west-2"
 cron_account_validator_cleanup_submissions = "cron(0 2 * * ? *)"
 
 environment = "live"
-
-release_bucket_name  = "ch-service-live-release.ch.gov.uk"
-release_artifact_key = "configurable-api-caller/configurable-api-caller.zip"
-
