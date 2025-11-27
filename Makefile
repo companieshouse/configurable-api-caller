@@ -8,17 +8,29 @@ clean:
 	rm -f ./$(artifact_name)-*.zip
 	rm -rf ./dist
 
-.PHONY: security-check
-security-check:
+.PHONY: dependency-check
+dependency-check:
 	npm audit
 
 .PHONY: build
 build:  install
 	npm run build
 
+.PHONY: test
+test:
+	npm run test
+
+.PHONY: sonar
+sonar:
+	npm run sonarqube
+
 .PHONY: install
 install:
 	npm i
+
+.PHONY: lint
+lint:
+	npm i lint
 
 .PHONY: package
 package: build
