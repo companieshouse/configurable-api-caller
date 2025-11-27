@@ -18,11 +18,11 @@ build:  install
 
 .PHONY: test
 test:
-	npm run test
+	# npm run test # add this back in when you write service tests
 
 .PHONY: sonar
 sonar:
-	npm run sonarqube
+	npm run sonar-scanner
 
 .PHONY: install
 install:
@@ -30,7 +30,7 @@ install:
 
 .PHONY: lint
 lint:
-	npm i lint
+	npm run lint
 
 .PHONY: package
 package: build
