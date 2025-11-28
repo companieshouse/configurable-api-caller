@@ -48,14 +48,12 @@ variable "release_artifact_key" {
   type        = string
 }
 
-# this was not specified in the original lambda - is 320 ok ?
 variable "memory_megabytes" {
   default     = 320
   description = "The amount of memory to allocate to the Lambda function"
   type        = number
 }
 
-# this was not specified in the original lambda - is 7 ok ?
 variable "lambda_logs_retention_days" {
   default     = 7
   description = "The number of days to retain Lambda logs in CloudWatch"
