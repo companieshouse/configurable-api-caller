@@ -63,7 +63,7 @@ locals {
     }
   ]
 
-  cloudwatch_event_rules_development_only = var.environment == "cidev" ? [
+  cloudwatch_event_rules_development_only = var.environment == "common" ? [
     {
       name                = "call-api-caller-lambda-dissolutions-rebel1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
