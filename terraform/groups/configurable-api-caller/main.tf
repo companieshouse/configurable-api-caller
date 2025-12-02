@@ -30,7 +30,7 @@ module "secrets" {
 }
 
 module "lambda" {
-  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=1.0.361"
+  source = "git@github.com:companieshouse/terraform-modules.git//aws/lambda?ref=feature/dvop-3499-updaate-cloudwatch-event-target-inputs-and-event-rule-outputs"
 
   environment           = var.environment
   function_name         = var.service
@@ -57,4 +57,6 @@ module "lambda" {
 
   lambda_vpc_access_subnet_ids = local.lambda_vpc_access_subnet_ids
   lambda_vpc_id                = data.aws_vpc.vpc.id
+
+  terraform_import_flag = true
 }
