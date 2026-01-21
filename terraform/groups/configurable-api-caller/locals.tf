@@ -68,13 +68,13 @@ locals {
       name                = "call-api-caller-lambda-dissolutions-rebel1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      target_input        = data.local_file.dissolutions_submit_rebel1.content
+      target_input        = data.local_file.dissolutions_submit_rebel1[0].content
     },
     {
       name                = "call-api-caller-lambda-dissolutions-phoenix1"
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely"
       schedule_expression = "rate(1 minute)"
-      target_input        = data.local_file.dissolutions_submit_phoenix1.content
+      target_input        = data.local_file.dissolutions_submit_phoenix1[0].content
     }
   ] : []
 }

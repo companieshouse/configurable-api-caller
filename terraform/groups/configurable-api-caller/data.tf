@@ -79,9 +79,13 @@ data "local_file" "account_validator_cleanup_submissions" {
 }
 
 data "local_file" "dissolutions_submit_rebel1" {
+  count = var.aws_account == "development-eu-west-2" ? 1 : 0
+
   filename = "${local.json_folder}/dissolutions_submit_rebel1.json"
 }
 
 data "local_file" "dissolutions_submit_phoenix1" {
+  count = var.aws_account == "development-eu-west-2" ? 1 : 0
+
   filename = "${local.json_folder}/dissolutions_submit_phoenix1.json"
 }
