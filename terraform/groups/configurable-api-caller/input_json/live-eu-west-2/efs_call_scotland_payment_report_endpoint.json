@@ -1,0 +1,14 @@
+{
+  "API_HOST": "internal-api.companieshouse.gov.uk",
+  "API_KEY_REF": "/api-caller/efs-submission-key",
+  "IS_SSL": true,
+  "HEADERS": {
+    "headers": {
+      "Authorization": "",
+      "Content-Type": "application/json"
+    }
+  },
+  "ENDPOINT": "/efs-submission-api/payment-reports/scotland",
+  "REGION": "eu-west-2",
+  "HTTP_VERB": "POST"
+}

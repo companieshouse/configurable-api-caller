@@ -60,6 +60,24 @@ locals {
       description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda at 2am everyday (7pm in dev environments)"
       schedule_expression = var.cron_account_validator_cleanup_submissions
       target_input        = data.local_file.account_validator_cleanup_submissions.content
+    },
+    {
+      name                = "efs-call-finance-payment-reports-endpoint"
+      description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely on main efs payment endpoint"
+      schedule_expression = var.cron_efs_call_finance_payment_reports_endpoint
+      target_input        = data.local_file.efs_call_finance_payment_reports_endpoint.content
+    },
+    {
+      name                = "efs-call-scotland-payment-report-endpoint"
+      description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely on scotland efs payment endpoint"
+      schedule_expression = var.cron_efs_call_scotland_payment_report_endpoint
+      target_input        = data.local_file.efs_call_scotland_payment_report_endpoint.content
+    },
+    {
+      name                = "efs-delayed-submission-call"
+      description         = "Cloudwatch event to call ${module.lambda.lambda_function_name} lambda routinely for delayed efs submissions"
+      schedule_expression = var.cron_efs_delayed_submission_call
+      target_input        = data.local_file.efs_delayed_submission_call.content
     }
   ]
 

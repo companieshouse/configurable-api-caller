@@ -78,6 +78,18 @@ data "local_file" "account_validator_cleanup_submissions" {
   filename = "${local.json_folder}/account_validator_cleanup_submissions.json"
 }
 
+data "local_file" "efs_call_finance_payment_reports_endpoint" {
+  filename = "${local.json_folder}/efs_call_finance_payment_reports_endpoint.json"
+}
+
+data "local_file" "efs_call_scotland_payment_report_endpoint" {
+  filename = "${local.json_folder}/efs_call_scotland_payment_report_endpoint.json"
+}
+
+data "local_file" "efs_delayed_submission_call" {
+  filename = "${local.json_folder}/efs_delayed_submission_call.json"
+}
+
 data "local_file" "dissolutions_submit_rebel1" {
   count = var.aws_account == "development-eu-west-2" ? 1 : 0
 
