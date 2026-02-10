@@ -64,3 +64,21 @@ variable "cron_account_validator_cleanup_submissions" {
   description = "The cron string for the account validator cleanup submission cloudwatch event rule."
   type        = string
 }
+
+variable "cron_efs_call_finance_payment_reports_endpoint" {
+  description = "The cron string for the EFS call finance payment reports endpoint cloudwatch event rule."
+  type        = string
+  default     = "cron(0 2 ? * * *)"
+}
+
+variable "cron_efs_call_scotland_payment_report_endpoint" {
+  description = "The cron string for the EFS call scotland payment report endpoint cloudwatch event rule."
+  type        = string
+  default     = "cron(0 2 ? * * *)"
+}
+
+variable "cron_efs_delayed_submission_call" {
+  description = "The cron string for the EFS delayed submission call cloudwatch event rule."
+  type        = string
+  default     = "cron(0 8 ? * MON-FRI *)"
+}
